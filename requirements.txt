@@ -1,5 +1,6 @@
 contexttimer
 decord
+numpy==2.0.2
 diffusers<=0.16.0
 einops>=0.4.1
 fairscale==0.4.4
