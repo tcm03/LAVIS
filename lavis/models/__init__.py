@@ -200,9 +200,11 @@ def load_model_and_preprocess(name, model_type, is_eval=False, device="cpu"):
         txt_processors (dict): preprocessors for text inputs.
     """
     model_cls = registry.get_model_class(name)
+    print(f'type(model_cls): {type(model_cls)}')
 
     # load model
     model = model_cls.from_pretrained(model_type=model_type)
+    print(f'type(model): {type(model)}')
 
     if is_eval:
         model.eval()
