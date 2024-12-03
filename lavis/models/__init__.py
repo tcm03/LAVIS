@@ -91,6 +91,7 @@ __all__ = [
     "VisionTransformerEncoder",
     "XBertLMHeadDecoder",
     "GPTDialogue",
+    "Blip2BARTpho",
 ]
 
 
