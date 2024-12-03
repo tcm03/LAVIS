@@ -22,7 +22,7 @@ opencv-python-headless==4.10.0.84
 
 opendatasets==0.1.22
 
-packaging==24.2
+packaging==24.1
 
 pandas==2.2.2
 
