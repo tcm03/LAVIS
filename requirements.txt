@@ -30,7 +30,7 @@ webdataset
 wheel
 torchaudio
 soundfile
-moviepy
+moviepy==1.0.3
 nltk
 peft
 
@@ -45,3 +45,4 @@ jaxlib==0.4.23
 scipy==1.12.0
 matplotlib<=3.0.0
 imageio>=2.27,<=2.31.2
+huggingface-hub==0.21.0
