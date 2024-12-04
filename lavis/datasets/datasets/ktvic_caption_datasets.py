@@ -23,17 +23,25 @@ class KTViCCapEvalDataset(CaptionEvalDataset):
     def __getitem__(self, index):
         ann = self.annotation[index]
 
-        image_path = os.path.join(self.vis_root, ann["image"])
+        # image_path = os.path.join(self.vis_root, ann["image_id"])
+        image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
         image = Image.open(image_path).convert("RGB")
 
         image = self.vis_processor(image)
+        caption = self.text_processor(ann["segment_caption"])
 
-        img_id = ann["image"].split("/")[-1].strip(".jpg").split("_")[-1]
+        # img_id = ann["image"].split("/")[-1].strip(".jpg").split("_")[-1]
+        img_id = ann["image_id"]
 
+        # return {
+        #     "image": image,
+        #     "image_id": img_id,
+        #     "instance_id": ann["instance_id"],
+        # }
         return {
             "image": image,
             "image_id": img_id,
-            "instance_id": ann["instance_id"],
+            "caption": caption,
         }
 
 
@@ -49,15 +57,40 @@ class KTViCNoCapsEvalDataset(CaptionEvalDataset):
     def __getitem__(self, index):
         ann = self.annotation[index]
 
-        image_path = os.path.join(self.vis_root, ann["image"])
+        # image_path = os.path.join(self.vis_root, ann["image"])
+        image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
         image = Image.open(image_path).convert("RGB")
 
         image = self.vis_processor(image)
 
         img_id = ann["img_id"]
+        captions = self.search_captions(img_id)
 
         return {
             "image": image,
             "image_id": img_id,
-            "instance_id": ann["instance_id"],
+            "captions": captions,
         }
+
+    def search_captions(self, img_id):
+        """
+        @tcm: In KTVIC, there are 5 captions per image. In addition, self.annotation is an array of dictionaries
+        of each image-caption pair with increase image_id. Thus, we can binary search on this list to find captions of
+        the image with img_id.
+        """
+        left = 0
+        right = len(self.annotation) - 1
+        while left != right:
+            mid = (left + right) // 2
+            if self.annotation[mid]["image_id"] < img_id:
+                left = mid + 1
+            else:
+                right = mid
+        
+        # we need to make sure that left-th annotation is the first annotation of the image with img_id and the
+        # next 4 captions are of this image too
+        assert self.annotation[left]["image_id"] == img_id and \
+                left+4 < len(self.annotation) and \
+                self.annotation[left+4]["image_id"] == img_id
+
+        return self.annotation[left:left+5]

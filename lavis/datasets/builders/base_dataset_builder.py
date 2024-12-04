@@ -108,6 +108,9 @@ class BaseDatasetBuilder:
           (2) basename/dirname: will be suffixed with base name of URL if dirname is provided.
 
         Local annotation paths should be relative.
+
+        @tcm: For KTVIC, basically copy annotation file from source to a cache folder
+        >> shutil.copyfile(src=src, dst=dst)
         """
         anns = self.config.build_info.annotations
 

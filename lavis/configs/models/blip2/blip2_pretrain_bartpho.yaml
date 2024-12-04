@@ -4,7 +4,7 @@
  # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 model:
-  arch: pretrain_bartpho
+  arch: blip2_bartpho
   load_finetuned: False
 
   pretrained: "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained.pth"
@@ -20,20 +20,20 @@ model:
   # Q-Former
   num_query_token: 32
 
-  # T5
-  bartpho_model: "vinai/bartpho-syllable"
+  # BARTpho
+  bartpho_model: "vinai/bartpho-syllable-base"
 
   # generation configs
-  prompt: ""
+  prompt: "một bức ảnh về "
 
 
 preprocess:
     vis_processor:
         train:
-          name: "blip_image_train"
+          name: "blip2_image_train"
           image_size: 224
         eval:
-          name: "blip_image_eval"
+          name: "blip2_image_eval"
           image_size: 224
     text_processor:
         train:

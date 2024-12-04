@@ -175,6 +175,7 @@ __all__ = [
     "ObjaverseQABuilder",
     "MusicAVQABuilder",
     "ESC50ClassificationBuilder",
+    "KTViCCapBuilder",
 
     ## Instruction Builders
     "AOKVQAInstructBuilder",

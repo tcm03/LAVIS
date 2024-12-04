@@ -6,7 +6,7 @@ from lavis.models.blip2_models.blip2 import Blip2Base, disabled_train
 from transformers import MBartForConditionalGeneration, AutoTokenizer
 from torch import nn
 
-@registry.register("models.blip2_bartpho")
+@registry.register("blip2_bartpho")
 class Blip2BARTpho(Blip2Base):
 
     PRETRAINED_MODEL_CONFIG_DICT = {
@@ -22,14 +22,14 @@ class Blip2BARTpho(Blip2Base):
         vit_precision="fp16",
         freeze_vit=True,
         num_query_token=32,
-        bart_model="vinai/bartpho-syllable",
+        bart_model="vinai/bartpho-syllable-base",
         prompt="",
         max_txt_len=32,
         apply_lemmatizer=False,
     ):
         super().__init__()
 
-        self.tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base")
+        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-syllable-base")
         self.tokenizer.add_special_tokens({"bos_token": "[DEC]"})
 
         self.visual_encoder, self.ln_vision = self.init_vision_encoder(
