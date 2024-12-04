@@ -53,6 +53,7 @@ class KTViCNoCapsEvalDataset(CaptionEvalDataset):
         split (string): val or test
         """
         super().__init__(vis_processor, text_processor, vis_root, ann_paths)
+        print(f'In KTViCNoCapsEvalDataset: 1st annotation keys: {self.annotation[0].keys()}')
 
     def __getitem__(self, index):
         ann = self.annotation[index]
