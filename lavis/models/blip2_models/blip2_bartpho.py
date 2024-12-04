@@ -10,7 +10,7 @@ from torch import nn
 class Blip2BARTpho(Blip2Base):
 
     PRETRAINED_MODEL_CONFIG_DICT = {
-        "bartpho": "lavis/configs/models/blip2/blip2_pretrain_bartpho.yaml",
+        "bartpho": "configs/models/blip2/blip2_pretrain_bartpho.yaml",
     }
 
     def __init__(
