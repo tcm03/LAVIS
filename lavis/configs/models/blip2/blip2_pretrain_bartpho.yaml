@@ -5,9 +5,10 @@
 
 model:
   arch: blip2_bartpho
-  load_finetuned: False
-
+  model_type: bartpho
+  load_finetuned: True
   pretrained: "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained.pth"
+  load_fineturned: False
   finetuned: ""
 
   # vit encoder
