@@ -39,7 +39,8 @@ class BaseDataset(Dataset):
                     if isinstance(loaded, list):
                         self.annotation.extend(loaded)
                     elif isinstance(loaded, dict):
-                       self.annotation.extend([{"sample_id": k, **v} if isinstance(v, dict) else {"sample_id": k, "data": v} for k, v in loaded.items()])
+                        print(f'here in basedataset')
+                        self.annotation.extend([{"sample_id": k, **v} if isinstance(v, dict) else {"sample_id": k, "data": v} for k, v in loaded.items()])
 
 
         self.vis_processor = vis_processor
