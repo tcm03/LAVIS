@@ -6,7 +6,7 @@ from lavis.models.blip2_models.blip2 import Blip2Base, disabled_train
 from transformers import MBartForConditionalGeneration, AutoTokenizer
 from torch import nn
 
-@registry.register("blip2_bartpho")
+@registry.register_model("blip2_bartpho")
 class Blip2BARTpho(Blip2Base):
 
     PRETRAINED_MODEL_CONFIG_DICT = {
