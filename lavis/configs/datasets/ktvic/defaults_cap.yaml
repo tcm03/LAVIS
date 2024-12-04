@@ -14,13 +14,13 @@ datasets:
       annotations:
         train:
           url: /kaggle/input/ktvic_dataset/train_data.json
-          storage: /kaggle/input/ktvic_dataset/annotations/train_data.json
+          storage: /kaggle/working/ktvic_dataset/annotations/train_data.json
         val:
           url: /kaggle/input/ktvic_dataset/test_data.json
-          storage: /kaggle/input/ktvic_dataset/annotations/test_data.json
+          storage: /kaggle/working/ktvic_dataset/annotations/test_data.json
         test:
           url: /kaggle/input/ktvic_dataset/test_data.json
-          storage: /kaggle/input/ktvic_dataset/annotations/test_data.json
+          storage: /kaggle/working/ktvic_dataset/annotations/test_data.json
       images:
         storage: /kaggle/input/ktvic_dataset/train-images
 
