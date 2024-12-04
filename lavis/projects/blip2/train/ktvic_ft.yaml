@@ -5,8 +5,9 @@
 
 model:
   arch: blip2_bartpho
-  # model_type: caption_coco_opt2.7b
-  load_finetuned: False
+  model_type: bartpho
+  # load_finetuned: False
+  load_finetuned: True
   use_grad_checkpoint: True
   freeze_vit: True
 
