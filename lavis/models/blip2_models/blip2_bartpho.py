@@ -323,7 +323,7 @@ class Blip2BARTpho(Blip2Base):
         vit_model = cfg.get("vit_model", "eva_clip_g")
         img_size = cfg.get("image_size")
         num_query_token = cfg.get("num_query_token")
-        bartpho = cfg.get("bartpho")
+        bartpho = cfg.get("bartpho_model")
 
         drop_path_rate = cfg.get("drop_path_rate", 0)
         use_grad_checkpoint = cfg.get("use_grad_checkpoint", False)
