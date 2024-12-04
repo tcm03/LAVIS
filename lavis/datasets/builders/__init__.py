@@ -34,6 +34,11 @@ from lavis.datasets.builders.caption_builder import (
     Flickr30kCapInstructBuilder
 
 )
+
+from lavis.datasets.builders.ktvic_builder import (
+    KTViCCapBuilder
+)
+
 from lavis.datasets.builders.image_text_pair_builder import (
     ConceptualCaption12MBuilder,
     ConceptualCaption12MInstructBuilder,
