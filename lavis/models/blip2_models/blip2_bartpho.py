@@ -22,7 +22,7 @@ class Blip2BARTpho(Blip2Base):
         vit_precision="fp16",
         freeze_vit=True,
         num_query_token=32,
-        bart_model="vinai/bartpho-syllable-base",
+        bartpho="vinai/bartpho-syllable-base",
         prompt="",
         max_txt_len=32,
         apply_lemmatizer=False,
@@ -52,8 +52,8 @@ class Blip2BARTpho(Blip2Base):
             layer.output = None
             layer.intermediate = None
 
-        self.bartpho_tokenizer = AutoTokenizer.from_pretrained(bart_model)
-        self.bartpho_model = MBartForConditionalGeneration.from_pretrained(bart_model)
+        self.bartpho_tokenizer = AutoTokenizer.from_pretrained(bartpho)
+        self.bartpho_model = MBartForConditionalGeneration.from_pretrained(bartpho)
 
         for _, param in self.bartpho_model.named_parameters():
             param.requires_grad = False
