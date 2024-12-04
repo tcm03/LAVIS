@@ -58,7 +58,9 @@ class KTViCNoCapsEvalDataset(CaptionEvalDataset):
     def __getitem__(self, index):
         ann = self.annotation[index]
         print(f'ann keys: {ann.keys()}')
-        print(f'ann["image"]: {ann["image"]}')
+        print(f'ann["sample_id"]: {ann["sample_id"]}')
+        print(f'ann["data"]: {ann["data"]}')
+        print(f'ann["instance_id"]: {ann["instance_id"]}')
         # image_path = os.path.join(self.vis_root, ann["image"])
         image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
         image = Image.open(image_path).convert("RGB")
