@@ -31,13 +31,11 @@ datasets:
         train:
           url: /kaggle/input/ktvic-cocoform/ktvic2coco/train_captions.json
           storage: /kaggle/working/ktvic2coco/annotations/train_captions.json
-        # val:
-        #   url: https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_val.json
-        #   md5: b273847456ef5580e33713b1f7de52a0
-        #   storage:  coco/annotations/coco_karpathy_val.json
-        # test:
-        #   url: https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_test.json
-        #   md5: 3ff34b0ef2db02d01c37399f6a2a6cd1
-        #   storage: coco/annotations/coco_karpathy_test.json
+        val:
+          url: /kaggle/input/ktvic-cocoform/ktvic2coco/val_captions.json
+          storage: /kaggle/working/ktvic2coco/annotations/val_captions.json
+        test:
+          url: /kaggle/input/ktvic-cocoform/ktvic2coco/test_captions.json
+          storage: /kaggle/working/ktvic2coco/annotations/test_captions.json
       images:
         storage: /kaggle/input/ktvic-cocoform/ktvic2coco
