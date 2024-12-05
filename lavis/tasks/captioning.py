@@ -55,7 +55,7 @@ class CaptionTask(BaseTask):
         sample_id_key = run_cfg.get("sample_id_key", "image_id")
         caption_key = run_cfg.get("caption_key", "caption")
         load_gt_from_file = run_cfg.get("load_gt_from_file", False)
-        split = run_cfg.get("valid_splits", ["val"])
+        split = run_cfg.get("valid_splits", ["train"])
         img_ids = run_cfg.get("img_ids", []) # evaluate only subset of imgs
 
         return cls(
