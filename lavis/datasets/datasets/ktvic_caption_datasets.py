@@ -18,3 +18,17 @@ class KTViCCapEvalDataset(CaptionEvalDataset):
         split (string): val or test
         """
         super().__init__(vis_processor, text_processor, vis_root, ann_paths)
+
+    def __getitem__(self, index):
+        ann = self.annotation[index]
+
+        image_path = os.path.join(self.vis_root, ann["image"])
+        image = Image.open(image_path).convert("RGB")
+
+        image = self.vis_processor(image)
+
+        return {
+            "image": image,
+            # "image_id": ann["image_id"],
+            # "instance_id": ann["instance_id"],
+        }
