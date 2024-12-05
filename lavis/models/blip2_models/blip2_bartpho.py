@@ -110,7 +110,7 @@ class Blip2BARTpho(Blip2Base):
                 output_tokens.input_ids == self.bartpho_tokenizer.pad_token_id, -100
             )
 
-            inputs_embeds = self.bartpho_model.encoder.embed_tokens(input_tokens.input_ids)
+            inputs_embeds = self.bartpho_model.get_encoder().embed_tokens(input_tokens.input_ids)
             inputs_embeds = torch.cat([inputs_bartpho, inputs_embeds], dim=1)
 
             outputs = self.bartpho_model(
@@ -191,7 +191,7 @@ class Blip2BARTpho(Blip2Base):
         encoder_atts = torch.cat([atts_bartpho, input_tokens.attention_mask], dim=1)
 
         with self.maybe_autocast(dtype=torch.bfloat16):
-            inputs_embeds = self.bartpho_model.encoder.embed_tokens(input_tokens.input_ids)
+            inputs_embeds = self.bartpho_model.get_encoder().embed_tokens(input_tokens.input_ids)
             inputs_embeds = torch.cat([inputs_bartpho, inputs_embeds], dim=1)
 
             outputs = self.bartpho_model.generate(
@@ -242,7 +242,7 @@ class Blip2BARTpho(Blip2Base):
             return_dict=True,
         )
 
-        inputs_bartpho = self.t5_proj(query_output.last_hidden_state)
+        inputs_bartpho = self.bartpho_proj(query_output.last_hidden_state)
         atts_bartpho = torch.ones(inputs_bartpho.size()[:-1], dtype=torch.long).to(image.device)
 
         if isinstance(samples["text_input"], str):
@@ -259,7 +259,7 @@ class Blip2BARTpho(Blip2Base):
         encoder_atts = torch.cat([atts_bartpho, input_tokens.attention_mask], dim=1)
 
         with self.maybe_autocast(dtype=torch.bfloat16):
-            inputs_embeds = self.bartpho_model.encoder.embed_tokens(input_tokens.input_ids)
+            inputs_embeds = self.bartpho_model.get_encoder().embed_tokens(input_tokens.input_ids)
             inputs_embeds = torch.cat([inputs_bartpho, inputs_embeds], dim=1)
 
             outputs = self.bartpho_model.generate(
