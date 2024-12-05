@@ -11,7 +11,7 @@ from lavis.datasets.datasets.caption_datasets import CaptionDataset, CaptionInst
 KTViCCapDataset = CaptionDataset
 KTViCCapInstructDataset = CaptionInstructDataset
 
-class KTViCCapEvalDataset(CaptionEvalDataset):
+class KTViCCapDataset(CaptionDataset):
     def __init__(self, vis_processor, text_processor, vis_root, ann_paths):
         """
         vis_root (string): Root directory of images (e.g. coco/images/)
@@ -19,33 +19,34 @@ class KTViCCapEvalDataset(CaptionEvalDataset):
         split (string): val or test
         """
         super().__init__(vis_processor, text_processor, vis_root, ann_paths)
+        print(f'In KTViCCapDataset: 1st annotation keys: {self.annotation[0].keys()}')
 
-    def __getitem__(self, index):
-        ann = self.annotation[index]
+    # def __getitem__(self, index):
+    #     ann = self.annotation[index]
 
-        image_path = os.path.join(self.vis_root, ann["image"])
-        # image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
-        image = Image.open(image_path).convert("RGB")
+    #     image_path = os.path.join(self.vis_root, ann["image"])
+    #     # image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
+    #     image = Image.open(image_path).convert("RGB")
 
-        image = self.vis_processor(image)
-        caption = self.text_processor(ann["caption"])
+    #     image = self.vis_processor(image)
+    #     caption = self.text_processor(ann["caption"])
 
-        # img_id = ann["image"].split("/")[-1].strip(".jpg").split("_")[-1]
-        img_id = ann["image_id"]
+    #     # img_id = ann["image"].split("/")[-1].strip(".jpg").split("_")[-1]
+    #     img_id = ann["image_id"]
 
-        # return {
-        #     "image": image,
-        #     "image_id": img_id,
-        #     "instance_id": ann["instance_id"],
-        # }
-        return {
-            "image": image,
-            "image_id": img_id,
-            "caption": caption,
-        }
+    #     return {
+    #         "image": image,
+    #         "image_id": img_id,
+    #         "instance_id": ann["instance_id"],
+    #     }
+    #     # return {
+    #     #     "image": image,
+    #     #     "image_id": img_id,
+    #     #     "caption": caption,
+    #     # }
 
 
-class KTViCNoCapsEvalDataset(CaptionEvalDataset):
+class KTViCCapEvalDataset(CaptionEvalDataset):
     def __init__(self, vis_processor, text_processor, vis_root, ann_paths):
         """
         vis_root (string): Root directory of images (e.g. coco/images/)
@@ -55,27 +56,27 @@ class KTViCNoCapsEvalDataset(CaptionEvalDataset):
         super().__init__(vis_processor, text_processor, vis_root, ann_paths)
         print(f'In KTViCNoCapsEvalDataset: 1st annotation keys: {self.annotation[0].keys()}')
 
-    def __getitem__(self, index):
-        ann = self.annotation[index]
-        # print(f'ann keys: {ann.keys()}')
-        # print(f'ann["sample_id"]: {ann["sample_id"]}')
-        # print(f'ann["data"]: {ann["data"]}')
-        # print(f'ann["instance_id"]: {ann["instance_id"]}')
+    # def __getitem__(self, index):
+    #     ann = self.annotation[index]
+    #     # print(f'ann keys: {ann.keys()}')
+    #     # print(f'ann["sample_id"]: {ann["sample_id"]}')
+    #     # print(f'ann["data"]: {ann["data"]}')
+    #     # print(f'ann["instance_id"]: {ann["instance_id"]}')
         
-        image_path = os.path.join(self.vis_root, ann["image"])
-        # image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
-        image = Image.open(image_path).convert("RGB")
+    #     image_path = os.path.join(self.vis_root, ann["image"])
+    #     # image_path = os.path.join(self.vis_root, f"{ann['image_id']:011}.jpg")
+    #     image = Image.open(image_path).convert("RGB")
 
-        image = self.vis_processor(image)
+    #     image = self.vis_processor(image)
 
-        img_id = ann["img_id"]
-        # captions = self.search_captions(img_id)
+    #     img_id = ann["img_id"]
+    #     # captions = self.search_captions(img_id)
 
-        return {
-            "image": image,
-            "image_id": img_id,
-            "instance_id": ann["instance_id"],
-        }
+    #     return {
+    #         "image": image,
+    #         "image_id": img_id,
+    #         "instance_id": ann["instance_id"],
+    #     }
 
     # def search_captions(self, img_id):
     #     """
