@@ -27,8 +27,10 @@ class KTViCCapEvalDataset(CaptionEvalDataset):
 
         image = self.vis_processor(image)
 
+        image_id = ann["image_id"].split("/")[-1].strip(".jpg").split("_")[-1]
+
         return {
             "image": image,
-            # "image_id": ann["image_id"],
+            "image_id": image_id,
             # "instance_id": ann["instance_id"],
         }
