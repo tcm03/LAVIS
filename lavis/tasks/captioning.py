@@ -169,7 +169,7 @@ def load_gt_file(file_path):
     if any(ext in file_path for ext in ['csv', 'tsv']):
         df = pd.read_csv(file_path)
         data.extend(df.to_dict(orient="records"))
-        
+
     elif 'jsonl' in file_path:
         with open(file_path, "r") as f:
             data.extend([json.loads(line) for line in f])
@@ -196,7 +196,7 @@ def convert_to_coco_gt(data, outpath, caption_key, sample_id_key, split, load_gt
             gt_data["images"].append({"id":img_id})
             if isinstance(captions, str):
                 gt_data["annotations"].append({"image_id":img_id, "caption":captions, "id":img_id})
-            else:   
+            else:
                 gt_data["annotations"].extend([{"image_id":img_id, "caption":c, "id":img_id} for c in captions])
     else:
         print(f"Generating ground truth file for evaluation....")
@@ -208,13 +208,17 @@ def convert_to_coco_gt(data, outpath, caption_key, sample_id_key, split, load_gt
             gt_data["images"].append({"id":img_id})
             if isinstance(captions, str):
                 gt_data["annotations"].append({"image_id":img_id, "caption":captions, "id":img_id})
-            else:   
+            else:
                 gt_data["annotations"].extend([{"image_id":img_id, "caption":c, "id":img_id} for c in captions])
     json.dump(gt_data, open(outpath, 'w'))
     print(f"Saved annotations at {outpath}")
 
 # TODO better structure for this.
-from pycocoevalcap.eval import COCOEvalCap
+from pycocoevalcap.bleu.bleu import Bleu
+from pycocoevalcap.cider.cider import Cider
+from pycocoevalcap.meteor.meteor import Meteor
+from pycocoevalcap.rouge.rouge import Rouge
+from pycocoevalcap.tokenizer.ptbtokenizer import PTBTokenizer
 from pycocotools.coco import COCO
 from torchvision.datasets.utils import download_url
 
@@ -235,7 +239,7 @@ def coco_caption_eval(coco_gt_root, results_file, split, annotation_file=None, i
         annotation_file = os.path.join(coco_gt_root, filenames[split])
     if is_url(annotation_file):
         annotation_file = cache_url(annotation_file, registry.get_path("cache_root"))
-        
+
     # create coco object and coco_result object
     coco = COCO(annotation_file)
     coco_result = coco.loadRes(results_file)
@@ -258,3 +262,70 @@ def coco_caption_eval(coco_gt_root, results_file, split, annotation_file=None, i
         print(f"{metric}: {score:.3f}")
 
     return coco_eval
+
+class COCOEvalCap:
+    def __init__(self, coco, cocoRes):
+        self.evalImgs = []
+        self.eval = {}
+        self.imgToEval = {}
+        self.coco = coco
+        self.cocoRes = cocoRes
+        self.params = {'image_id': coco.getImgIds()}
+
+    def evaluate(self):
+        imgIds = self.params['image_id']
+        # imgIds = self.coco.getImgIds()
+        gts = {}
+        res = {}
+        for imgId in imgIds:
+            gts[imgId] = self.coco.imgToAnns[imgId]
+            res[imgId] = self.cocoRes.imgToAnns[imgId]
+
+        # =================================================
+        # Set up scorers
+        # =================================================
+        print('tokenization...')
+        tokenizer = PTBTokenizer()
+        gts  = tokenizer.tokenize(gts)
+        res = tokenizer.tokenize(res)
+
+        # =================================================
+        # Set up scorers
+        # =================================================
+        print('setting up scorers...')
+        scorers = [
+            (Bleu(4), ["Bleu_1", "Bleu_2", "Bleu_3", "Bleu_4"]),
+            (Meteor(),"METEOR"),
+            (Rouge(), "ROUGE_L"),
+            (Cider(), "CIDEr"),
+        ]
+
+        # =================================================
+        # Compute scores
+        # =================================================
+        for scorer, method in scorers:
+            print('computing %s score...'%(scorer.method()))
+            score, scores = scorer.compute_score(gts, res)
+            if type(method) == list:
+                for sc, scs, m in zip(score, scores, method):
+                    self.setEval(sc, m)
+                    self.setImgToEvalImgs(scs, gts.keys(), m)
+                    print("%s: %0.3f"%(m, sc))
+            else:
+                self.setEval(score, method)
+                self.setImgToEvalImgs(scores, gts.keys(), method)
+                print("%s: %0.3f"%(method, score))
+        self.setEvalImgs()
+
+    def setEval(self, score, method):
+        self.eval[method] = score
+
+    def setImgToEvalImgs(self, scores, imgIds, method):
+        for imgId, score in zip(imgIds, scores):
+            if not imgId in self.imgToEval:
+                self.imgToEval[imgId] = {}
+                self.imgToEval[imgId]["image_id"] = imgId
+            self.imgToEval[imgId][method] = score
+
+    def setEvalImgs(self):
+        self.evalImgs = [eval for imgId, eval in self.imgToEval.items()]
