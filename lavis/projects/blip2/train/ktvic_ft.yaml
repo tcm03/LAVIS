@@ -6,8 +6,7 @@
 model:
   arch: blip2_bartpho
   model_type: bartpho
-  # load_finetuned: False
-  load_finetuned: True
+  load_finetuned: False
   use_grad_checkpoint: True
   freeze_vit: True
 
