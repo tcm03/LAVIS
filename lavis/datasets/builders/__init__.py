@@ -8,6 +8,7 @@
 from lavis.datasets.builders.base_dataset_builder import load_dataset_config
 from lavis.datasets.builders.caption_builder import (
     COCOCapBuilder,
+    KTViCCapBuilder,
     MSRVTTCapBuilder,
     MSVDCapBuilder,
     VATEXCapBuilder,
@@ -20,7 +21,7 @@ from lavis.datasets.builders.caption_builder import (
     VALORCaptionInstructBuilder,
     ViolinCapBuilder,
     ViolinCapInstructBuilder,
-    VlepCaptionInstructBuilder, 
+    VlepCaptionInstructBuilder,
     VlepCaptionBuilder,
     YouCookCaptionBuilder,
     YouCookCaptionInstructBuilder,
@@ -31,12 +32,7 @@ from lavis.datasets.builders.caption_builder import (
     TextCapsCapBuilder,
     TextCapsCapInstructBuilder,
     Flickr30kCapBuilder,
-    Flickr30kCapInstructBuilder
-
-)
-
-from lavis.datasets.builders.ktvic_builder import (
-    KTViCCapBuilder
+    Flickr30kCapInstructBuilder,
 )
 
 from lavis.datasets.builders.image_text_pair_builder import (
@@ -49,7 +45,7 @@ from lavis.datasets.builders.image_text_pair_builder import (
     SBUCaptionBuilder,
     SBUCaptionInstructBuilder,
     Laion400MBuilder,
-    Laion400MInstructBuilder
+    Laion400MInstructBuilder,
 )
 from lavis.datasets.builders.classification_builder import (
     NLVRBuilder,
@@ -57,16 +53,16 @@ from lavis.datasets.builders.classification_builder import (
     SNLIVisualEntailmentInstructBuilder,
     ViolinEntailmentInstructBuilder,
     ViolinEntailmentBuilder,
-    ESC50ClassificationBuilder
+    ESC50ClassificationBuilder,
 )
 from lavis.datasets.builders.imagefolder_builder import ImageNetBuilder
 from lavis.datasets.builders.video_qa_builder import (
-    MSRVTTQABuilder, 
+    MSRVTTQABuilder,
     MSVDQABuilder,
     MSRVTTQAInstructBuilder,
     MSVDQAInstructBuilder,
     MusicAVQABuilder,
-    MusicAVQAInstructBuilder
+    MusicAVQAInstructBuilder,
 )
 
 from lavis.datasets.builders.vqa_builder import (
@@ -86,7 +82,7 @@ from lavis.datasets.builders.vqa_builder import (
     ScienceQAInstructBuilder,
     OCRVQABuilder,
     OCRVQAInstructBuilder,
-    VizWizVQABuilder
+    VizWizVQABuilder,
 )
 from lavis.datasets.builders.retrieval_builder import (
     MSRVTTRetrievalBuilder,
@@ -101,37 +97,45 @@ from lavis.datasets.builders.audio_caption_builder import (
     AudioSetInstructBuilder,
     AudioCapsInstructCapBuilder,
     WavCapsCapInstructBuilder,
-    WavCapsCapBuilder
+    WavCapsCapBuilder,
 )
 
 from lavis.datasets.builders.object3d_caption_builder import (
     ObjaverseCaptionInstructBuilder,
     ShapenetCaptionInstructBuilder,
     ObjaverseCaptionBuilder,
-    ShapenetCaptionBuilder
+    ShapenetCaptionBuilder,
 )
 from lavis.datasets.builders.object3d_qa_builder import ObjaverseQABuilder
-from lavis.datasets.builders.object3d_classification_builder import ModelNetClassificationBuilder
+from lavis.datasets.builders.object3d_classification_builder import (
+    ModelNetClassificationBuilder,
+)
 
 from lavis.datasets.builders.audio_qa_builder import AudioCapsQABuilder, ClothoQABuilder
 
 from lavis.datasets.builders.dialogue_builder import (
-    AVSDDialBuilder, 
+    AVSDDialBuilder,
     AVSDDialInstructBuilder,
     YT8MDialBuilder,
     LLaVA150kDialInstructBuilder,
     VisDialBuilder,
-    VisDialInstructBuilder
+    VisDialInstructBuilder,
 )
-from lavis.datasets.builders.text_to_image_generation_builder import BlipDiffusionFinetuneBuilder
+from lavis.datasets.builders.text_to_image_generation_builder import (
+    BlipDiffusionFinetuneBuilder,
+)
 
-from lavis.datasets.builders.discrn_builders import DiscrnImagePcBuilder, DiscrnAudioVideoBuilder
+from lavis.datasets.builders.discrn_builders import (
+    DiscrnImagePcBuilder,
+    DiscrnAudioVideoBuilder,
+)
 
 from lavis.common.registry import registry
 
 __all__ = [
     "BlipDiffusionFinetuneBuilder",
     "COCOCapBuilder",
+    "KTViCCapBuilder",
     "COCORetrievalBuilder",
     "COCOVQABuilder",
     "ConceptualCaption12MBuilder",
@@ -155,7 +159,6 @@ __all__ = [
     "VGVQABuilder",
     "AVSDDialBuilder",
     "Laion400MBuilder",
-
     "ViolinCapBuilder",
     "ViolinEntailmentBuilder",
     "VlepCaptionBuilder",
@@ -180,8 +183,6 @@ __all__ = [
     "ObjaverseQABuilder",
     "MusicAVQABuilder",
     "ESC50ClassificationBuilder",
-    "KTViCCapBuilder",
-
     ## Instruction Builders
     "AOKVQAInstructBuilder",
     "OKVQAInstructBuilder",
@@ -205,7 +206,7 @@ __all__ = [
     "MusicAVQAInstructBuilder",
     "ViolinCapInstructBuilder",
     "ViolinEntailmentInstructBuilder",
-    "VlepCaptionInstructBuilder", 
+    "VlepCaptionInstructBuilder",
     "YouCookCaptionInstructBuilder",
     "COINCaptionInstructBuilder",
     "CharadeCaptionInstructBuilder",
@@ -225,11 +226,9 @@ __all__ = [
     "VGCaptionInstructBuilder",
     "SBUCaptionInstructBuilder",
     "ClothoQABuilder",
-
     # DisCRN
     "DiscrnImagePcBuilder",
-    "DiscrnAudioVideoBuilder"
-
+    "DiscrnAudioVideoBuilder",
 ]
 
 
