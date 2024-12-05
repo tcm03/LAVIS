@@ -33,11 +33,11 @@ run:
   task: captioning
   # optimizer
   lr_sched: "linear_warmup_cosine_lr"
-  init_lr: 1e-5
+  init_lr: 3e-5
   min_lr: 0
   warmup_lr: 1e-8
-  warmup_steps: 1000
-  weight_decay: 0.05
+  warmup_steps: 800
+  weight_decay: 0.01
   max_epoch: 30
   batch_size_train: 16
   batch_size_eval: 8
