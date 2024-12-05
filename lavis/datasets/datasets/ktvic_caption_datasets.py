@@ -9,6 +9,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 from lavis.datasets.datasets.caption_datasets import CaptionDataset, CaptionInstructDataset, CaptionEvalDataset
 
 KTViCCapDataset = CaptionDataset
+KTViCCapInstructDataset = CaptionInstructDataset
 
 class KTViCCapEvalDataset(CaptionEvalDataset):
     def __init__(self, vis_processor, text_processor, vis_root, ann_paths):

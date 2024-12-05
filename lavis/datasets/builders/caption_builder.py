@@ -23,6 +23,7 @@ from lavis.datasets.datasets.coco_caption_datasets import (
 from lavis.common.registry import registry
 from lavis.datasets.datasets.ktvic_caption_datasets import (
     KTViCCapDataset,
+    KTViCCapInstructDataset,
     KTViCCapEvalDataset,
 )
 from lavis.datasets.datasets.video_caption_datasets import (
@@ -86,6 +87,14 @@ class KTViCCapBuilder(BaseDatasetBuilder):
         "default": "configs/datasets/ktvic/defaults_cap.yaml",
     }
 
+@registry.register_builder("ktvic_caption_instruct")
+class KTViCCapInstructBuilder(BaseDatasetBuilder):
+    train_dataset_cls = KTViCCapInstructDataset
+    eval_dataset_cls = KTViCCapEvalDataset
+
+    DATASET_CONFIG_DICT = {
+        "default": "configs/datasets/ktvic/defaults_cap_instruct.yaml",
+    }
 
 @registry.register_builder("coco_caption_instruct")
 class COCOCapInstructBuilder(BaseDatasetBuilder):
