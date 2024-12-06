@@ -52,7 +52,7 @@ class CaptionTask(BaseTask):
 
         report_metric = run_cfg.get("report_metric", True)
         annotation_file = run_cfg.get("annotation_file", None)
-        sample_id_key = run_cfg.get("sample_id_key", "image_id")
+        sample_id_key = run_cfg.get("sample_id_key", "image_id") # "instance_id"
         caption_key = run_cfg.get("caption_key", "caption")
         load_gt_from_file = run_cfg.get("load_gt_from_file", False)
         split = run_cfg.get("valid_splits", ["val"])

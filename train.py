@@ -85,7 +85,7 @@ def main():
     setup_seeds(cfg)
 
     # set after init_distributed_mode() to only log on master.
-    setup_logger()
+    setup_pplogger()
 
     cfg.pretty_print()
 

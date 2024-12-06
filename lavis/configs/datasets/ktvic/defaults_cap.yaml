@@ -14,15 +14,15 @@ datasets:
       annotations:
         train:
           url: /kaggle/input/ktvic-cocoform/ktvic2coco/train_captions.json
-          storage: /kaggle/working/ktvic2coco/annotations/train_captions.json
+          storage: /kaggle/working/ktvic2coco/annotations/train_captions.json # ann_paths
         val:
           url: /kaggle/input/ktvic-cocoform/ktvic2coco/val_captions.json
-          storage: /kaggle/working/ktvic2coco/annotations/val_captions.json
+          storage: /kaggle/working/ktvic2coco/annotations/val_captions.json # ann_paths
         test:
           url: /kaggle/input/ktvic-cocoform/ktvic2coco/test_captions.json
-          storage: /kaggle/working/ktvic2coco/annotations/test_captions.json
-      images:
-        storage: /kaggle/input/ktvic-cocoform/ktvic2coco
+          storage: /kaggle/working/ktvic2coco/annotations/test_captions.json # ann_paths
+      images: 
+        storage: /kaggle/input/ktvic-cocoform/ktvic2coco # vis_root
 
     vis_processor:
       train:
