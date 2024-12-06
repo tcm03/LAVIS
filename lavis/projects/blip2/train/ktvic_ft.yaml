@@ -22,7 +22,7 @@ datasets:
     text_processor:
         train:
           name: "blip_caption"
-          prompt: "một bức ảnh về "
+          prompt: ""
         eval:
           name: "blip_caption"
     # build_info:

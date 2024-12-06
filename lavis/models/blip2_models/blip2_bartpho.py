@@ -22,14 +22,14 @@ class Blip2BARTpho(Blip2Base):
         vit_precision="fp16",
         freeze_vit=True,
         num_query_token=32,
-        bartpho="vinai/bartpho-syllable-base",
+        bartpho="vinai/bartpho-word-base",
         prompt="",
         max_txt_len=32,
         apply_lemmatizer=False,
     ):
         super().__init__()
 
-        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-syllable-base")
+        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-word-base")
         self.tokenizer.add_special_tokens({"bos_token": "[DEC]"})
 
         self.visual_encoder, self.ln_vision = self.init_vision_encoder(

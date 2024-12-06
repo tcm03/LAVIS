@@ -22,7 +22,7 @@ model:
   num_query_token: 32
 
   # BARTpho
-  bartpho_model: "vinai/bartpho-syllable-base"
+  bartpho_model: "vinai/bartpho-word-base"
 
   # generation configs
   prompt: "một bức ảnh về "
