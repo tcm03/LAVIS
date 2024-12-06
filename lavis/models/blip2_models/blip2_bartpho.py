@@ -71,10 +71,8 @@ class Blip2BARTpho(Blip2Base):
 
     def forward(self, samples):
         image = samples["image"] # (16, 3, 224, 224)
-        # print(f'Blip2BARTpho::forward::image.shape: {image.shape}')
         with self.maybe_autocast():
             image_embeds = self.ln_vision(self.visual_encoder(image)) # (16, 257, 1408)
-        # print(f'Blip2BARTpho::forward::image_embeds.shape: {image_embeds.shape}')
         image_atts = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(
             image.device
         )
@@ -87,22 +85,19 @@ class Blip2BARTpho(Blip2Base):
             return_dict=True,
         )
         # query_output.last_hidden_state: (16, 32, 768)
-        # print(f'Blip2BARTpho::forward::query_output.last_hidden_state.shape: {query_output.last_hidden_state.shape}')
 
-        inputs_bartpho = self.bartpho_proj(query_output.last_hidden_state)
-        print(f'Blip2BARTpho::forward::inputs_bartpho.shape: {inputs_bartpho.shape}')
+        inputs_bartpho = self.bartpho_proj(query_output.last_hidden_state) # (16, 32, 768)
         atts_bartpho = torch.ones(inputs_bartpho.size()[:-1], dtype=torch.long).to(image.device)
 
         with self.maybe_autocast(dtype=torch.bfloat16):
-            print(f'Blip2BARTpho::forward::samples["text_input"]: {samples["text_input"]}')
             input_tokens = self.bartpho_tokenizer(
-                samples["text_input"],
+                samples["text_input"], # "một bức ảnh về "
                 padding="longest",
                 truncation=True,
                 max_length=self.max_txt_len,
                 return_tensors="pt",
             ).to(image.device)
-            print(f'Blip2BARTpho::forward::input_tokens.input_ids.shape: {input_tokens.input_ids.shape}')
+            # input_tokens.input_ids: (16, 6)
             output_tokens = self.bartpho_tokenizer(
                 samples["text_output"],
                 padding="longest",
@@ -110,7 +105,7 @@ class Blip2BARTpho(Blip2Base):
                 max_length=self.max_txt_len,
                 return_tensors="pt",
             ).to(image.device)
-            print(f'Blip2BARTpho::forward::output_tokens.input_ids.shape: {output_tokens.input_ids.shape}')
+            # output_tokens.input_ids: (16, 32)
 
             encoder_atts = torch.cat([atts_bartpho, input_tokens.attention_mask], dim=1)
 
@@ -118,10 +113,8 @@ class Blip2BARTpho(Blip2Base):
                 output_tokens.input_ids == self.bartpho_tokenizer.pad_token_id, -100
             )
 
-            inputs_embeds = self.bartpho_model.get_encoder().embed_tokens(input_tokens.input_ids)
-            print(f'Blip2BARTpho::forward::inputs_embeds.shape: {inputs_embeds.shape}')
-            inputs_embeds = torch.cat([inputs_bartpho, inputs_embeds], dim=1)
-            print(f'Blip2BARTpho::forward::inputs_embeds.shape: {inputs_embeds.shape}')
+            inputs_embeds = self.bartpho_model.get_encoder().embed_tokens(input_tokens.input_ids) # (16, 6, 768)
+            inputs_embeds = torch.cat([inputs_bartpho, inputs_embeds], dim=1) # (16, 38, 768)
 
             outputs = self.bartpho_model(
                 inputs_embeds=inputs_embeds,
@@ -131,6 +124,9 @@ class Blip2BARTpho(Blip2Base):
                 labels=targets,
             )
             loss = outputs.loss
+            print(f'type(outputs): {type(outputs)}')
+            decoded_output = self.bartpho_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+            print(f'decoded_output: {decoded_output}')
 
             return {"loss": loss}
 
