@@ -122,11 +122,11 @@ class Blip2BARTpho(Blip2Base):
                 decoder_attention_mask=output_tokens.attention_mask,
                 return_dict=True,
                 labels=targets,
-            )
+            ) # <class 'transformers.modeling_outputs.Seq2SeqLMOutput'>
             loss = outputs.loss
-            print(f'type(outputs): {type(outputs)}')
-            # decoded_output = self.bartpho_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
-            # print(f'decoded_output: {decoded_output}')
+            generated_ids = outputs.logits.argmax(dim=-1)  # (batch_size, sequence_length)
+            decoded_output = self.bartpho_tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            print(f'decoded_output: {decoded_output}')
 
             return {"loss": loss}
 
