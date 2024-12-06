@@ -70,10 +70,11 @@ class Blip2BARTpho(Blip2Base):
         self._lemmatizer = None
 
     def forward(self, samples):
-        image = samples["image"]
-        print(f'Blip2BARTpho::forward::image.shape: {image.shape}')
+        image = samples["image"] # (16, 3, 224, 224)
+        # print(f'Blip2BARTpho::forward::image.shape: {image.shape}')
         with self.maybe_autocast():
             image_embeds = self.ln_vision(self.visual_encoder(image))
+        print(f'Blip2BARTpho::forward::image_embeds.shape: {image_embeds.shape}')
         image_atts = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(
             image.device
         )
@@ -85,6 +86,7 @@ class Blip2BARTpho(Blip2Base):
             encoder_attention_mask=image_atts,
             return_dict=True,
         )
+        print(f'Blip2BARTpho::forward::query_output.last_hidden_state.shape: {query_output.last_hidden_state.shape}')
 
         inputs_bartpho = self.bartpho_proj(query_output.last_hidden_state)
         atts_bartpho = torch.ones(inputs_bartpho.size()[:-1], dtype=torch.long).to(image.device)
