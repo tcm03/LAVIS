@@ -125,8 +125,8 @@ class Blip2BARTpho(Blip2Base):
             )
             loss = outputs.loss
             print(f'type(outputs): {type(outputs)}')
-            decoded_output = self.bartpho_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
-            print(f'decoded_output: {decoded_output}')
+            # decoded_output = self.bartpho_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+            # print(f'decoded_output: {decoded_output}')
 
             return {"loss": loss}
 
