@@ -76,23 +76,6 @@ class Blip2BARTpho(Blip2Base):
         self._apply_lemmatizer = apply_lemmatizer
         self._lemmatizer = None
 
-    @classmethod
-    def init_Qformer(cls, num_query_token, vision_width, cross_attention_freq=2):
-        encoder_config = transformers.AutoConfig.from_pretrained("vinai/phobert-base")
-        encoder_config.encoder_width = vision_width
-        # insert cross-attention layer every other block
-        encoder_config.add_cross_attention = True
-        encoder_config.cross_attention_freq = cross_attention_freq
-        encoder_config.query_length = num_query_token
-        Qformer = BertLMHeadModel.from_pretrained(
-            "bert-base-uncased", config=encoder_config
-        )
-        query_tokens = nn.Parameter(
-            torch.zeros(1, num_query_token, encoder_config.hidden_size)
-        )
-        query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)
-        return Qformer, query_tokens
-
     def forward(self, samples):
         image = samples["image"] # (16, 3, 224, 224)
         with self.maybe_autocast():
