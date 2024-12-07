@@ -36,11 +36,13 @@ class Blip2BARTpho(Blip2Base):
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
         )
         if freeze_vit:
-            for _, param in self.visual_encoder.named_parameters():
-                param.requires_grad = False
-            self.visual_encoder = self.visual_encoder.eval()
-            self.visual_encoder.train = disabled_train
-            logging.info("freeze vision encoder")
+            for name, param in self.visual_encoder.named_parameters():
+                if "blocks.38.mlp" in name:
+                    param.requires_grad = True
+                else:
+                    param.requires_grad = False
+            self.visual_encoder.train()
+            logging.info("partially freeze vision encoder")
 
         self.Qformer, self.query_tokens = self.init_Qformer(
             num_query_token, self.visual_encoder.num_features
