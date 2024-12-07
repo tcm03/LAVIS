@@ -65,9 +65,9 @@ class Blip2BARTpho(Blip2Base):
                                 param.requires_grad = False
                 else:
                     # Ensure all other modules remain frozen
-                    module.train(False)
+                    module.train(True)
                     for param in module.parameters():
-                        param.requires_grad = False
+                        param.requires_grad = True
             for name, param in self.visual_encoder.named_parameters():
                 print(f"{name}: requires_grad={param.requires_grad}")
 
