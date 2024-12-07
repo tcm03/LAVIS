@@ -39,16 +39,15 @@ class Blip2BARTpho(Blip2Base):
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
         )
         if freeze_vit:
-            # for _, param in self.visual_encoder.named_parameters():
-            #     param.requires_grad = False
-
-            # Frozen all layers except the last layer
+            # Frozen all layers except the last two linear layers
             for name, param in self.visual_encoder.named_parameters():
+                if not "blocks.38.mlp" in name:
+                    param.requires_grad = False
+                    continue
                 print(name)
-                param.requires_grad = False
-            self.visual_encoder = self.visual_encoder.eval()
-            self.visual_encoder.train = disabled_train
-            logging.info("freeze all layers except the last layer in vision encoder")
+            self.visual_encoder = self.visual_encoder.train()
+            # self.visual_encoder.train = disabled_train
+            logging.info("freeze all layers except the last two linear layers in vision encoder")
 
         self.Qformer, self.query_tokens = self.init_Qformer(
             num_query_token, self.visual_encoder.num_features
