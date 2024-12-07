@@ -22,14 +22,14 @@ class Blip2BARTpho(Blip2Base):
         vit_precision="fp16",
         freeze_vit=True,
         num_query_token=32,
-        bartpho="vinai/bartpho-word-base",
+        bartpho="vinai/bartpho-word",
         prompt="",
         max_txt_len=32,
         apply_lemmatizer=False,
     ):
         super().__init__()
 
-        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-word-base")
+        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-word")
         self.tokenizer.add_special_tokens({"bos_token": "[DEC]"})
 
         self.visual_encoder, self.ln_vision = self.init_vision_encoder(
@@ -91,7 +91,7 @@ class Blip2BARTpho(Blip2Base):
 
         with self.maybe_autocast(dtype=torch.bfloat16):
             input_tokens = self.bartpho_tokenizer(
-                samples["text_input"], # "một bức ảnh về "
+                samples["text_input"], # "một bức ảnh về ", now ""
                 padding="longest",
                 truncation=True,
                 max_length=self.max_txt_len,
