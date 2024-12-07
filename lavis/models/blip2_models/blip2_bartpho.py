@@ -45,20 +45,10 @@ class Blip2BARTpho(Blip2Base):
                     param.requires_grad = False
             self.visual_encoder.training = True
             children = self.visual_encoder.children()
+            print(children)
             layer = 0
             for module in children:
-                layer += 1
-                if layer == 39:
-                    inner_count, inner_children = 0, module.children()
-                    print(inner_children)
-                    for inner_module in inner_children:
-                        inner_count += 1
-                        if inner_count >= 10:
-                            inner_module.train(True)
-                        else:
-                            inner_module.train(False)
-                else:
-                    module.train(False)
+                print(module)
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
 
