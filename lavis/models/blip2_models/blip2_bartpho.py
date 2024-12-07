@@ -63,7 +63,11 @@ class Blip2BARTpho(Blip2Base):
                             block.train(False)
                             for param in block.parameters():
                                 param.requires_grad = False
+            for name, param in self.visual_encoder.named_parameters():
+                print(f"{name}: requires_grad={param.requires_grad}")
 
+            for name, module in self.visual_encoder.named_modules():
+                print(f"{name}: training={module.training}")
 
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
