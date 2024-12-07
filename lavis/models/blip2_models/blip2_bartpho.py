@@ -39,43 +39,31 @@ class Blip2BARTpho(Blip2Base):
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
         )
         if freeze_vit:
-            # Freeze all layers except the last block's MLP
-            for name, param in self.visual_encoder.named_parameters():
-                if not "blocks.38.mlp" in name:  # Adjust based on naming conventions
-                    param.requires_grad = False
-                else:
-                    param.requires_grad = True
-            self.visual_encoder = self.visual_encoder.train()
-            # Traverse the model's children to adjust train mode
-            children = list(self.visual_encoder.children())
-            for layer_idx, module in enumerate(children):
-                if layer_idx == 2:
-                    # Access the blocks within the ModuleList
-                    block_list = list(module.children())
-                    print(f'block_list: {block_list}')
-                    for block_idx, block in enumerate(block_list):
-                        if block_idx == 38:  # Only modify the 39th block
-                            # Ensure the block is in training mode
-                            block = block.train(True)
-                            # Traverse the block's children to adjust train mode
-                            block_children = list(block.children())
-                            print(f'block_children: {block_children}')
-                            for block_child_idx, block_child in enumerate(block_children):
-                                if block_child_idx == 2:
-                                    # Access the MLP within the block
-                                    mlp = list(block_child.children())
-                                    for mlp_layer in mlp:
-                                        # Ensure the MLP is in training mode
-                                        mlp_layer.train(True)
-                                else:
-                                    # Freeze all other blocks
-                                    block_child = block_child.train(False)
+            # Freeze all parameters in the visual encoder by default
+            for param in self.visual_encoder.parameters():
+                param.requires_grad = False
+
+            # Enable only the 'mlp' submodule of block 38
+            for layer_idx, module in enumerate(self.visual_encoder.children()):
+                if layer_idx == 2:  # Access the blocks module
+                    for block_idx, block in enumerate(module.children()):
+                        if block_idx == 38:  # Find the 39th block
+                            block.train(True)  # Set block to training mode
+                            for name, submodule in block.named_children():
+                                if name == "mlp":  # Enable training for the MLP submodule
+                                    submodule.train(True)
+                                    for param in submodule.parameters():
+                                        param.requires_grad = True
+                                else:  # Freeze all other submodules within the block
+                                    submodule.train(False)
+                                    for param in submodule.parameters():
+                                        param.requires_grad = False
                         else:
-                            # Freeze all other blocks
+                            # Ensure all other blocks remain frozen
                             block.train(False)
-                else:
-                    # Freeze all other layers
-                    module.train(False)
+                            for param in block.parameters():
+                                param.requires_grad = False
+
 
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
