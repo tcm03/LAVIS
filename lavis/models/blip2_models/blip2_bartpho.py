@@ -62,7 +62,7 @@ class Blip2BARTpho(Blip2Base):
                             for block_child in block_children:
                                 print(block_child._get_name())
                                 # Enable training only for the MLP layers in the last block
-                                if "mlp" in block_child._get_name():
+                                if "Mlp" in block_child._get_name():
                                     print("Training MLP layer")
                                     block_child.train(True)
                                 else:
