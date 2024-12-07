@@ -41,6 +41,7 @@ class Blip2BARTpho(Blip2Base):
         if freeze_vit:
             # Freeze all layers except the last block's MLP
             for name, param in self.visual_encoder.named_parameters():
+                print(name)
                 if not "blocks.38" in name:  # Adjust based on naming conventions
                     param.requires_grad = False
                 else:
