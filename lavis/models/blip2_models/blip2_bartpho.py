@@ -41,11 +41,12 @@ class Blip2BARTpho(Blip2Base):
         if freeze_vit:
             # Freeze all layers except the last block's MLP
             for name, param in self.visual_encoder.named_parameters():
+                print(name)
                 if not "blocks.38.mlp" in name:  # Adjust based on naming conventions
                     param.requires_grad = False
                 else:
                     param.requires_grad = True
-
+            self.visual_encoder = self.visual_encoder.train()
             # Traverse the model's children to adjust train mode
             children = list(self.visual_encoder.children())
             for layer_idx, module in enumerate(children):
@@ -55,7 +56,7 @@ class Blip2BARTpho(Blip2Base):
                     for block_idx, block in enumerate(block_list):
                         if block_idx == 38:  # Only modify the 39th block
                             # Ensure the block is in training mode
-                            block.train(False)
+                            block = block.train(True)
                             # Traverse the block's children to adjust train mode
                             block_children = list(block.children())
                             for block_child_idx, block_child in enumerate(block_children):
@@ -65,6 +66,9 @@ class Blip2BARTpho(Blip2Base):
                                     for mlp_layer in mlp:
                                         # Ensure the MLP is in training mode
                                         mlp_layer.train(True)
+                                else:
+                                    # Freeze all other blocks
+                                    block_child = block_child.train(False)
                         else:
                             # Freeze all other blocks
                             block.train(False)
