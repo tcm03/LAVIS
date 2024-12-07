@@ -1,9 +1,10 @@
 import logging
 
 import torch
+import transformers
 from lavis.common.registry import registry
 from lavis.models.blip2_models.blip2 import Blip2Base, disabled_train
-from transformers import MBartForConditionalGeneration, AutoTokenizer, AutoConfig
+from transformers import MBartForConditionalGeneration, AutoTokenizer
 from torch import nn
 
 from lavis.models.med import BertLMHeadModel
@@ -78,13 +79,13 @@ class Blip2BARTpho(Blip2Base):
 
     @classmethod
     def init_Qformer(cls, num_query_token, vision_width, cross_attention_freq=2):
-        encoder_config = AutoConfig.from_pretrained("vinai/phobert-base")
+        encoder_config = transformers.AutoConfig.from_pretrained("vinai/phobert-base")
         encoder_config.encoder_width = vision_width
         # insert cross-attention layer every other block
         encoder_config.add_cross_attention = True
         encoder_config.cross_attention_freq = cross_attention_freq
         encoder_config.query_length = num_query_token
-        Qformer = BertLMHeadModel.from_pretrained(
+        Qformer = transformers.BertLMHeadModel.from_pretrained(
             "vinai/phobert-base", config=encoder_config
         )
         query_tokens = nn.Parameter(
