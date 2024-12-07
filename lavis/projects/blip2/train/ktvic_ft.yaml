@@ -8,7 +8,7 @@ model:
   model_type: bartpho
   load_finetuned: False
   use_grad_checkpoint: True
-  freeze_vit: False
+  freeze_vit: True
 
 datasets:
   ktvic_caption_instruct: # name of the dataset builder

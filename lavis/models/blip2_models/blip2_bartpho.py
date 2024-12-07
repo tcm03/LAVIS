@@ -44,7 +44,6 @@ class Blip2BARTpho(Blip2Base):
                 if not "blocks.38.mlp" in name:
                     param.requires_grad = False
                     continue
-                print(name)
             self.visual_encoder = self.visual_encoder.train()
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
