@@ -38,16 +38,11 @@ class Blip2BARTpho(Blip2Base):
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
         )
         if freeze_vit:
-            # for _, param in self.visual_encoder.named_parameters():
-            #     param.requires_grad = False
-
-            # Frozen all layers except the last layer
-            for name, param in self.visual_encoder.named_parameters():
-                print(name)
+            for _, param in self.visual_encoder.named_parameters():
                 param.requires_grad = False
             self.visual_encoder = self.visual_encoder.eval()
             self.visual_encoder.train = disabled_train
-            logging.info("freeze all layers except the last layer in vision encoder")
+            logging.info("freeze vision encoder")
 
         self.Qformer, self.query_tokens = self.init_Qformer(
             num_query_token, self.visual_encoder.num_features
@@ -75,23 +70,6 @@ class Blip2BARTpho(Blip2Base):
 
         self._apply_lemmatizer = apply_lemmatizer
         self._lemmatizer = None
-
-    @classmethod
-    def init_Qformer(cls, num_query_token, vision_width, cross_attention_freq=2):
-        encoder_config = AutoConfig.from_pretrained("vinai/phobert-base")
-        encoder_config.encoder_width = vision_width
-        # insert cross-attention layer every other block
-        encoder_config.add_cross_attention = True
-        encoder_config.cross_attention_freq = cross_attention_freq
-        encoder_config.query_length = num_query_token
-        Qformer = BertLMHeadModel.from_pretrained(
-            "vinai/phobert-base", config=encoder_config
-        )
-        query_tokens = nn.Parameter(
-            torch.zeros(1, num_query_token, encoder_config.hidden_size)
-        )
-        query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)
-        return Qformer, query_tokens
 
     def forward(self, samples):
         image = samples["image"] # (16, 3, 224, 224)
