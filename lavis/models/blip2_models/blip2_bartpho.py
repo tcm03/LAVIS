@@ -52,12 +52,14 @@ class Blip2BARTpho(Blip2Base):
                 if layer_idx == 2:
                     # Access the blocks within the ModuleList
                     block_list = list(module.children())
+                    print(f'block_list: {block_list}')
                     for block_idx, block in enumerate(block_list):
                         if block_idx == 38:  # Only modify the 39th block
                             # Ensure the block is in training mode
                             block = block.train(True)
                             # Traverse the block's children to adjust train mode
                             block_children = list(block.children())
+                            print(f'block_children: {block_children}')
                             for block_child_idx, block_child in enumerate(block_children):
                                 if block_child_idx == 2:
                                     # Access the MLP within the block
