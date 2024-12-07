@@ -45,7 +45,11 @@ class Blip2BARTpho(Blip2Base):
                 if not "blocks.38" in name:  # Adjust based on naming conventions
                     param.requires_grad = False
                 else:
+                    print(name)
                     param.requires_grad = True
+
+            for p in self.visual_encoder.parameters():
+                print(p)
 
             # Traverse the model's children to adjust train mode
             children = list(self.visual_encoder.children())
