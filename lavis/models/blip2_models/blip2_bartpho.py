@@ -76,7 +76,10 @@ class Blip2BARTpho(Blip2Base):
                             block_children = inner_module.children()
                             # only train the mlps in the last block
                             for block_child in block_children:
-                                print (block_child._get_name())
+                                if "Mlp" in block_child._get_name():
+                                    block_child.train(True)
+                                else:
+                                    block_child.train(False)
                         else:
                             inner_module.train(False)
 
