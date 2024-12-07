@@ -43,7 +43,6 @@ class Blip2BARTpho(Blip2Base):
             for name, param in self.visual_encoder.named_parameters():
                 if not "blocks.38.mlp" in name:
                     param.requires_grad = False
-            self.visual_encoder.training = True
             children = self.visual_encoder.children()
             layer = 0
             for module in children:
