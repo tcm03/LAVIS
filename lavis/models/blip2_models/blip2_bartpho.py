@@ -45,10 +45,43 @@ class Blip2BARTpho(Blip2Base):
                     param.requires_grad = False
             self.visual_encoder.training = True
             children = self.visual_encoder.children()
-            print(children)
             layer = 0
             for module in children:
-                print(module)
+                layer += 1
+                if layer == 3: # ModuleList
+                    # ModuleList(
+                    #     (0-38): 39 x Block(
+                    #         (norm1): LayerNorm((1408,), eps=1e-06, elementwise_affine=True)
+                    #         (attn): Attention(
+                    #         (qkv): Linear(in_features=1408, out_features=4224, bias=False)
+                    #         (attn_drop): Dropout(p=0.0, inplace=False)
+                    #         (proj): Linear(in_features=1408, out_features=1408, bias=True)
+                    #         (proj_drop): Dropout(p=0.0, inplace=False)
+                    #         )
+                    #         (drop_path): Identity()
+                    #         (norm2): LayerNorm((1408,), eps=1e-06, elementwise_affine=True)
+                    #         (mlp): Mlp(
+                    #         (fc1): Linear(in_features=1408, out_features=6144, bias=True)
+                    #         (act): GELU(approximate='none')
+                    #         (fc2): Linear(in_features=6144, out_features=1408, bias=True)
+                    #         (drop): Dropout(p=0.0, inplace=False)
+                    #         )
+                    #     )
+                    # )
+                    inner_layer, inner_children = 0, module.children()
+
+                    for inner_module in inner_children:
+                        inner_layer += 1
+                        if inner_layer == 39:
+                            block_children = inner_module.children()
+                            # only train the mlps in the last block
+                            for block_child in block_children:
+                                print (block_child._get_name())
+                        else:
+                            inner_module.train(False)
+
+                else:
+                    module.train(False)
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
 
