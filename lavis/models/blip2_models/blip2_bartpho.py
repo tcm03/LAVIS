@@ -49,10 +49,14 @@ class Blip2BARTpho(Blip2Base):
             # Traverse the model's children to adjust train mode
             children = list(self.visual_encoder.children())
             for layer_idx, module in enumerate(children):
+                print(layer_idx)
+                print(module)
                 if layer_idx == 2:
                     # Access the blocks within the ModuleList
                     block_list = list(module.children())
                     for block_idx, block in enumerate(block_list):
+                        print(block_idx)
+                        print(block)
                         if block_idx == 38:  # Only modify the 39th block
                             block_children = list(block.children())
                             for block_child in block_children:
