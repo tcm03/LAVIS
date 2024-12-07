@@ -84,8 +84,8 @@ class Blip2BARTpho(Blip2Base):
         encoder_config.add_cross_attention = True
         encoder_config.cross_attention_freq = cross_attention_freq
         encoder_config.query_length = num_query_token
-        Qformer = transformers.BertLMHeadModel.from_pretrained(
-            "vinai/phobert-base", config=encoder_config
+        Qformer = BertLMHeadModel.from_pretrained(
+            "bert-base-uncased", config=encoder_config
         )
         query_tokens = nn.Parameter(
             torch.zeros(1, num_query_token, encoder_config.hidden_size)
