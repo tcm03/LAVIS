@@ -45,6 +45,8 @@ class Blip2BARTpho(Blip2Base):
                     param.requires_grad = False
                 else:
                     param.requires_grad = True
+            # Ensure the visual encoder is in training mode for the unfrozen layers
+            self.visual_encoder.train()
 
             # Traverse the model's children to adjust train mode
             children = list(self.visual_encoder.children())
@@ -55,13 +57,13 @@ class Blip2BARTpho(Blip2Base):
                     # Access the blocks within the ModuleList
                     block_list = list(module.children())
                     for block_idx, block in enumerate(block_list):
-                        print(block_idx)
-                        print(block)
                         if block_idx == 38:  # Only modify the 39th block
                             block_children = list(block.children())
                             for block_child in block_children:
+                                print(block_child._get_name())
                                 # Enable training only for the MLP layers in the last block
-                                if "Mlp" in block_child._get_name():
+                                if "mlp" in block_child._get_name():
+                                    print("Training MLP layer")
                                     block_child.train(True)
                                 else:
                                     block_child.train(False)
@@ -71,9 +73,6 @@ class Blip2BARTpho(Blip2Base):
                 else:
                     # Freeze all other layers
                     module.train(False)
-
-            # Ensure the visual encoder is in training mode for the unfrozen layers
-            self.visual_encoder.train()
 
             # self.visual_encoder.train = disabled_train
             logging.info("freeze all layers except the last two linear layers in vision encoder")
