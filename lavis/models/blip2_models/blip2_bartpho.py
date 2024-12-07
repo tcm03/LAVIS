@@ -46,6 +46,7 @@ class Blip2BARTpho(Blip2Base):
             # Enable only the 'mlp' submodule of block 38
             for layer_idx, module in enumerate(self.visual_encoder.children()):
                 if layer_idx == 2:  # Access the blocks module
+                    module.train(False)
                     for block_idx, block in enumerate(module.children()):
                         if block_idx == 38:  # Find the 39th block
                             block.train(True)  # Set block to training mode
