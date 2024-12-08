@@ -8,15 +8,15 @@ from torch import nn
 
 from lavis.models.med import BertLMHeadModel
 
-def get_contributing_params(y, top_level=True):
-    nf = y.grad_fn.next_functions if top_level else y.next_functions
-    for f, _ in nf:
-        try:
-            yield f.variable
-        except AttributeError:
-            pass  # node has no tensor
-        if f is not None:
-            yield from get_contributing_params(f, top_level=False)
+# def get_contributing_params(y, top_level=True):
+#     nf = y.grad_fn.next_functions if top_level else y.next_functions
+#     for f, _ in nf:
+#         try:
+#             yield f.variable
+#         except AttributeError:
+#             pass  # node has no tensor
+#         if f is not None:
+#             yield from get_contributing_params(f, top_level=False)
 
 @registry.register_model("blip2_bartpho")
 class Blip2BARTpho(Blip2Base):
@@ -142,10 +142,10 @@ class Blip2BARTpho(Blip2Base):
             decoded_output = self.bartpho_tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
             # print(f'decoded_output: {decoded_output}')
 
-            contributing_parameters = set(get_contributing_params(loss))
-            all_parameters = set(net.parameters())
-            non_contributing = all_parameters - contributing_parameters
-            print(non_contributing)
+            # contributing_parameters = set(get_contributing_params(loss))
+            # all_parameters = set(net.parameters())
+            # non_contributing = all_parameters - contributing_parameters
+            # print(non_contributing)
 
             return {"loss": loss}
 
