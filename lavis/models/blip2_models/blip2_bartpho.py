@@ -42,41 +42,9 @@ class Blip2BARTpho(Blip2Base):
             # Freeze all parameters in the visual encoder by default
             for param in self.visual_encoder.parameters():
                 param.requires_grad = False
-
-            # Enable only the 'mlp' submodule of block 38
-            for layer_idx, module in enumerate(self.visual_encoder.children()):
-                if layer_idx == 2:  # Access the blocks module
-                    module.train(False)
-                    for block_idx, block in enumerate(module.children()):
-                        if block_idx == 38:  # Find the 39th block
-                            block.train(True)  # Set block to training mode
-                            for name, submodule in block.named_children():
-                                if name == "mlp":  # Enable training for the MLP submodule
-                                    submodule.train(True)
-                                    for param in submodule.parameters():
-                                        param.requires_grad = True
-                                else:  # Freeze all other submodules within the block
-                                    submodule.train(False)
-                                    for param in submodule.parameters():
-                                        param.requires_grad = False
-                        else:
-                            # Ensure all other blocks remain frozen
-                            block.train(False)
-                            for param in block.parameters():
-                                param.requires_grad = False
-                else:
-                    # Ensure all other modules remain frozen
-                    module.train(False)
-                    for param in module.parameters():
-                        param.requires_grad = False
-            for name, param in self.visual_encoder.named_parameters():
-                print(f"{name}: requires_grad={param.requires_grad}")
-
-            for name, module in self.visual_encoder.named_modules():
-                print(f"{name}: training={module.training}")
-
-            # self.visual_encoder.train = disabled_train
-            logging.info("freeze all layers except the last two linear layers in vision encoder")
+            self.visual_encoder = self.visual_encoder.eval()
+            self.visual_encoder.train = disabled_train
+            logging.info("Visual encoder is frozen.")
 
         self.Qformer, self.query_tokens = self.init_Qformer(
             num_query_token, self.visual_encoder.num_features
