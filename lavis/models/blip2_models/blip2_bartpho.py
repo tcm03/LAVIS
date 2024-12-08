@@ -8,6 +8,16 @@ from torch import nn
 
 from lavis.models.med import BertLMHeadModel
 
+def get_contributing_params(y, top_level=True):
+    nf = y.grad_fn.next_functions if top_level else y.next_functions
+    for f, _ in nf:
+        try:
+            yield f.variable
+        except AttributeError:
+            pass  # node has no tensor
+        if f is not None:
+            yield from get_contributing_params(f, top_level=False)
+
 @registry.register_model("blip2_bartpho")
 class Blip2BARTpho(Blip2Base):
 
@@ -130,7 +140,12 @@ class Blip2BARTpho(Blip2Base):
             loss = outputs.loss
             generated_ids = outputs.logits.argmax(dim=-1)  # (batch_size, sequence_length)
             decoded_output = self.bartpho_tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-            print(f'decoded_output: {decoded_output}')
+            # print(f'decoded_output: {decoded_output}')
+
+            contributing_parameters = set(get_contributing_params(outputs))
+            all_parameters = set(net.parameters())
+            non_contributing = all_parameters - contributing_parameters
+            print(non_contributing)
 
             return {"loss": loss}
 
