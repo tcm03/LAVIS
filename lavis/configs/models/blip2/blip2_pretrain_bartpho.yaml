@@ -12,7 +12,7 @@ model:
   vit_model: eva_clip_g
 
   # vit encoder
-  image_size: 224
+  image_size: 364
   drop_path_rate: 0
   use_grad_checkpoint: True
   vit_precision: "fp16"
@@ -35,10 +35,10 @@ preprocess:
     vis_processor:
         train:
           name: "blip2_image_train"
-          image_size: 224
+          image_size: 364
         eval:
           name: "blip2_image_eval"
-          image_size: 224
+          image_size: 364
     text_processor:
         train:
           name: "blip_caption"
