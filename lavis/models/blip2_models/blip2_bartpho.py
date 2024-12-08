@@ -142,7 +142,7 @@ class Blip2BARTpho(Blip2Base):
             decoded_output = self.bartpho_tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
             # print(f'decoded_output: {decoded_output}')
 
-            contributing_parameters = set(get_contributing_params(outputs))
+            contributing_parameters = set(get_contributing_params(loss))
             all_parameters = set(net.parameters())
             non_contributing = all_parameters - contributing_parameters
             print(non_contributing)
