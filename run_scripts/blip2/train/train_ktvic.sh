@@ -1,1 +1,1 @@
-python -m torch.distributed.run --nproc_per_node=1 train.py --cfg-path lavis/projects/blip2/train/ktvic_ft.yaml
+python -m torch.distributed.run --nproc_per_node=2 train.py --cfg-path lavis/projects/blip2/train/ktvic_ft.yaml
