@@ -41,20 +41,15 @@ class Blip2BARTpho(Blip2Base):
     ):
         super().__init__()
 
-        self.tokenizer = AutoTokenizer.from_pretrained("vinai/bartpho-word")
-        self.tokenizer.add_special_tokens({"bos_token": "[DEC]"})
-
         self.visual_encoder, self.ln_vision = self.init_vision_encoder(
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
         )
         if freeze_vit:
-            for name, param in self.visual_encoder.named_parameters():
-                if "blocks.38.mlp" in name:
-                    param.requires_grad = True
-                else:
-                    param.requires_grad = False
-            self.visual_encoder.train()
-            logging.info("partially freeze vision encoder")
+            for _, param in self.visual_encoder.named_parameters():
+                param.requires_grad = False
+            self.visual_encoder = self.visual_encoder.eval()
+            self.visual_encoder.train = disabled_train
+            logging.info("freeze vision encoder")
 
         self.Qformer, self.query_tokens = self.init_Qformer(
             num_query_token, self.visual_encoder.num_features
