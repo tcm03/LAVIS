@@ -25,6 +25,7 @@ class Blip2MBART(Blip2Base):
         mbart="facebook/mbart-large-50",
         prompt="",
         max_txt_len=32,
+        apply_lemmatizer=False,
     ):
         super().__init__()
 
