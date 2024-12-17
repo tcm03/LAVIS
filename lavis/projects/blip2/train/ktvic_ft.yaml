@@ -8,17 +8,17 @@ model:
   model_type: bartpho
   load_finetuned: False
   use_grad_checkpoint: True
-  freeze_vit: True
+  freeze_vit: False
 
 datasets:
   ktvic_caption_instruct: # name of the dataset builder
     vis_processor:
         train:
           name: "blip2_image_train"
-          image_size: 364
+          image_size: 224
         eval:
           name: "blip2_image_eval"
-          image_size: 364
+          image_size: 224
     text_processor:
         train:
           name: "blip_caption"

@@ -13,16 +13,16 @@ datasets:
       # Be careful not to append minus sign (-) before split to avoid itemizing
       annotations:
         train:
-          url: /kaggle/input/ktvic-cocoform/ktvic2coco/train_captions.json
+          url: /content/data/ktvic2coco/train_captions.json
           storage: /kaggle/working/ktvic2coco/annotations/train_captions.json # ann_paths
         val:
-          url: /kaggle/input/ktvic-cocoform/ktvic2coco/val_captions.json
+          url: /content/data/ktvic2coco/val_captions.json
           storage: /kaggle/working/ktvic2coco/annotations/val_captions.json # ann_paths
         test:
-          url: /kaggle/input/ktvic-cocoform/ktvic2coco/test_captions.json
+          url: /content/data/ktvic2coco/test_captions.json
           storage: /kaggle/working/ktvic2coco/annotations/test_captions.json # ann_paths
-      images: 
-        storage: /kaggle/input/ktvic-cocoform/ktvic2coco # vis_root
+      images:
+        storage: /content/data/ktvic2coco # vis_root
 
     vis_processor:
       train:
