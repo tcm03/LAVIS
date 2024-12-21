@@ -7,9 +7,9 @@ model:
   arch: blip2_bartpho
   model_type: bartpho
   load_finetuned: True
-  
+
   pretrained: "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained.pth"
-  finetuned: "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained.pth"
+  finetuned: "https://storage.cloud.google.com/project-lavis-1/blip2_ktvic_finetune.pth"
   vit_model: eva_clip_g
 
   # vit encoder
@@ -26,7 +26,7 @@ model:
   bartpho_model: "vinai/bartpho-word"
 
   # generation configs
-  prompt: "một bức ảnh về "
+  prompt: ""
 
   max_txt_len: 32
   apply_lemmatizer: False
